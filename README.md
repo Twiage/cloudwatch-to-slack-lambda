@@ -62,48 +62,6 @@ Follow these steps to configure the webhook in Slack:
   5. Click 'Save Settings' at the bottom of the Slack integration
      page.
 
-#### Encrypted the Slack webhook URL
-
-If you don't want or need to encrypt your hook URL, you can use the
-`UNENCRYPTED_HOOK_URL`.  If this variable is specified, the
-`KMS_ENCRYPTED_HOOK_URL` is ignored.
-
-If you **do** want to encrypt your hook URL, follow these steps to
-encrypt your Slack hook URL for use in this function:
-
-  1. Create a KMS key -
-     http://docs.aws.amazon.com/kms/latest/developerguide/create-keys.html.
-
-  2. Encrypt the event collector token using the AWS CLI.
-     $ aws kms encrypt --key-id alias/<KMS key name> --plaintext "<SLACK_HOOK_URL>"
-
-     Note: You must exclude the protocol from the URL
-     (e.g. "hooks.slack.com/services/abc123").
-
-  3. Copy the base-64 encoded, encrypted key (CiphertextBlob) to the
-     ENCRYPTED_HOOK_URL variable.
-
-  4. Give your function's role permission for the kms:Decrypt action.
-     Example:
-
-```
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "Stmt1443036478000",
-            "Effect": "Allow",
-            "Action": [
-                "kms:Decrypt"
-            ],
-            "Resource": [
-                "<your KMS key ARN>"
-            ]
-        }
-    ]
-}
-```
-
 
 ### 4. Deploy to AWS Lambda
 
